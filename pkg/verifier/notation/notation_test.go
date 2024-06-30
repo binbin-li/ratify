@@ -22,17 +22,17 @@ import (
 	"reflect"
 	"testing"
 
-	ratifyconfig "github.com/deislabs/ratify/config"
-	"github.com/deislabs/ratify/pkg/common"
-	"github.com/deislabs/ratify/pkg/homedir"
-	"github.com/deislabs/ratify/pkg/ocispecs"
-	"github.com/deislabs/ratify/pkg/referrerstore"
-	"github.com/deislabs/ratify/pkg/referrerstore/config"
-	"github.com/deislabs/ratify/pkg/verifier"
 	sig "github.com/notaryproject/notation-core-go/signature"
 	"github.com/notaryproject/notation-go"
 	"github.com/opencontainers/go-digest"
 	ocispec "github.com/opencontainers/image-spec/specs-go/v1"
+	ratifyconfig "github.com/ratify-project/ratify/config"
+	"github.com/ratify-project/ratify/pkg/common"
+	"github.com/ratify-project/ratify/pkg/homedir"
+	"github.com/ratify-project/ratify/pkg/ocispecs"
+	"github.com/ratify-project/ratify/pkg/referrerstore"
+	"github.com/ratify-project/ratify/pkg/referrerstore/config"
+	"github.com/ratify-project/ratify/pkg/verifier"
 )
 
 const (
@@ -257,8 +257,8 @@ func TestParseVerifierConfig(t *testing.T) {
 				Name:              test,
 				VerificationCerts: []string{testPath, defaultCertDir},
 				VerificationCertStores: map[string][]string{
-					"certstore1": {"defaultns/akv1", "testns/akv2"},
-					"certstore2": {"testns/akv3", "testns/akv4"},
+					"certstore1": {"defaultns/akv1", "akv2"},
+					"certstore2": {"akv3", "akv4"},
 				},
 			},
 		},
