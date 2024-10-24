@@ -27,11 +27,11 @@ import (
 	"strings"
 	"time"
 
-	re "github.com/deislabs/ratify/errors"
-	"github.com/deislabs/ratify/internal/logger"
-	"github.com/deislabs/ratify/pkg/certificateprovider"
-	"github.com/deislabs/ratify/pkg/certificateprovider/azurekeyvault/types"
-	"github.com/deislabs/ratify/pkg/metrics"
+	re "github.com/ratify-project/ratify/errors"
+	"github.com/ratify-project/ratify/internal/logger"
+	"github.com/ratify-project/ratify/pkg/certificateprovider"
+	"github.com/ratify-project/ratify/pkg/certificateprovider/azurekeyvault/types"
+	"github.com/ratify-project/ratify/pkg/metrics"
 	"golang.org/x/crypto/pkcs12"
 
 	kv "github.com/Azure/azure-sdk-for-go/services/keyvault/v7.1/keyvault"
@@ -90,7 +90,7 @@ func (s *akvCertProvider) GetCertificates(ctx context.Context, attrib map[string
 	}
 
 	if len(keyVaultCerts) == 0 {
-		return nil, nil, re.ErrorCodeConfigInvalid.NewError(re.CertProvider, providerName, re.EmptyLink, nil, "no keyvault certificate configured", re.PrintStackTrace)
+		return nil, nil, re.ErrorCodeConfigInvalid.NewError(re.CertProvider, providerName, re.EmptyLink, nil, "no keyvault certificate configured", re.HideStackTrace)
 	}
 
 	logger.GetLogger(ctx, logOpt).Debugf("vaultURI %s", keyvaultURI)
@@ -106,7 +106,7 @@ func (s *akvCertProvider) GetCertificates(ctx context.Context, attrib map[string
 		logger.GetLogger(ctx, logOpt).Debugf("fetching secret from key vault, certName %v,  keyvault %v", keyVaultCert.CertificateName, keyvaultURI)
 
 		// fetch the object from Key Vault
-		// GetSecret is required so we can fetch the entire cert chain. See issue https://github.com/deislabs/ratify/issues/695 for details
+		// GetSecret is required so we can fetch the entire cert chain. See issue https://github.com/ratify-project/ratify/issues/695 for details
 		startTime := time.Now()
 		secretBundle, err := kvClient.GetSecret(ctx, keyvaultURI, keyVaultCert.CertificateName, keyVaultCert.CertificateVersion)
 
@@ -155,7 +155,7 @@ func getKeyvaultRequestObj(ctx context.Context, attrib map[string]string) ([]typ
 	for i, object := range objects.Array {
 		var keyVaultCert types.KeyVaultCertificate
 		if err = yaml.Unmarshal([]byte(object), &keyVaultCert); err != nil {
-			return nil, re.ErrorCodeDataDecodingFailure.NewError(re.CertProvider, providerName, re.EmptyLink, err, fmt.Sprintf("unmarshal failed for keyVaultCerts at index: %d", i), re.PrintStackTrace)
+			return nil, re.ErrorCodeDataDecodingFailure.NewError(re.CertProvider, providerName, re.EmptyLink, err, fmt.Sprintf("unmarshal failed for keyVaultCerts at index: %d", i), re.HideStackTrace)
 		}
 		// remove whitespace from all fields in keyVaultCert
 		formatKeyVaultCertificate(&keyVaultCert)
@@ -213,12 +213,12 @@ func initializeKvClient(ctx context.Context, keyVaultEndpoint, tenantID, clientI
 
 	err := kvClient.AddToUserAgent("ratify")
 	if err != nil {
-		return nil, re.ErrorCodeConfigInvalid.NewError(re.CertProvider, providerName, re.AKVLink, err, "failed to add user agent to keyvault client", re.PrintStackTrace)
+		return nil, re.ErrorCodeConfigInvalid.NewError(re.CertProvider, providerName, re.AKVLink, err, "failed to add user agent to keyvault client", re.HideStackTrace)
 	}
 
 	kvClient.Authorizer, err = getAuthorizerForWorkloadIdentity(ctx, tenantID, clientID, kvEndpoint)
 	if err != nil {
-		return nil, re.ErrorCodeAuthDenied.NewError(re.CertProvider, providerName, re.AKVLink, err, "failed to get authorizer for keyvault client", re.PrintStackTrace)
+		return nil, re.ErrorCodeAuthDenied.NewError(re.CertProvider, providerName, re.AKVLink, err, "failed to get authorizer for keyvault client", re.HideStackTrace)
 	}
 	return &kvClient, nil
 }
