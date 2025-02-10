@@ -1,199 +1,107 @@
-image:
-  repository: ghcr.io/ratify-project/ratify
-  crdRepository: ghcr.io/ratify-project/ratify-crds
-  tag: v1.4.0
-  pullPolicy: IfNotPresent
+# Default values for ratify.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
 
-nameOverride: ""
-fullnameOverride: ""
 replicaCount: 1
-affinity: {}
-tolerations: []
-notationCerts: []
-cosignKeys: []
+
+image:
+  repository: libinbinacr.azurecr.io/ratify
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: v2
 
 notation:
-  enabled: true
-  trustPolicies:
-    - name: default
-      verificatonLevel: strict
-      registryScopes:
-        - "*"
-      trustedIdentities: ["*"]
-      trustStores: []
-
-cosign:
-  enabled: true
-  scopes: ["*"] # corresponds to a single trust policy
-  key: "" # DEPRECATED: Use cosignKeys instead
-  rekorURL: ""
-  tLogVerify: true
-  keyless:
-    ctLogVerify: true
-    certificateIdentity: ""
-    certificateIdentityRegExp: ""
-    certificateOIDCIssuer: ""
-    certificateOIDCIssuerRegExp: ""
-
-vulnerabilityreport:
-  enabled: false
-  passthrough: false
-  schemaURL: ""
-  createdAnnotationName: ""
-  maximumAge: ""
-  notaryProjectSignatureRequired: false
-  disallowedSeverities: []
-  denylistCVEs: []
-sbom:
-  enabled: false
-  notaryProjectSignatureRequired: false
-  disallowedLicenses: []
-  disallowedPackages: []
-resources:
-  limits:
-    cpu: 1000m
-    memory: 512Mi
-  requests:
-    cpu: 600m
-    memory: 512Mi
+  certs: {}
+  trustpolicy: ""
 
 serviceAccount:
+  # Specifies whether a service account should be created
   create: true
-  name: ratify-admin
+  # Automatically mount a ServiceAccount's API credentials?
+  automount: true
   # Annotations to add to the service account
   annotations: {}
-
-gatekeeper:
-  version: "3.18.0"
-  namespace: # default is gatekeeper-system
-instrumentation:
-  metricsEnabled: true
-  metricsType: prometheus
-  metricsPort: 8888
-
-# Can be used to authenticate to:
-# ACR -> oras.authProviders.azureWorkloadIdentityEnabled
-# Key Vault -> azurekeyvault.enabled
-azureWorkloadIdentity:
-  clientId:
-
-azureManagedIdentity:
-  clientId:
-  tenantId:
-
-azurekeyvault:
-  enabled: false
-  vaultURI:
-  tenantId:
-  certificates: []
-  keys: []
-  refreshInterval:
-
-alibabacloudAcrConfig:
-  defaultInstanceId:
-  acrInstancesConfig: []
-
-oras:
-  useHttp: false
-  authProviders:
-    azureWorkloadIdentityEnabled: false
-    azureManagedIdentityEnabled: false
-    azureContainerRegistryEndpoints: []
-    k8secretsEnabled: false
-    awsEcrBasicEnabled: false
-    awsApiOverride:
-      enabled: false
-      endpoint: ""
-      partition: "" # defaults to aws
-      region: ""
-    alibabacloudAcrBasicEnabled: false
-
-  cache:
-    # Please tune your cache parameters to get better performance on the Oras Store performance.
-    enabled: true # ttl-based cache may cause inconsistency between cache and data source, please disable it if strong consistency is required.
-    ttl: 10 # in seconds
-
-provider:
-  tls:
-    crt: "" # crt used by ratify (httpserver), please provide your own crt
-    key: "" # key used by ratify (httpserver), please provide your own key
-    caCert: "" # CA crt used by ratify (httpserver), please provide your own CA crt
-    caKey: "" # CA key used by ratify (httpserver), please provide your own CA key
-    cabundle: "" # base64 encoded CA bundle used for the 'caBundle' property for the ratify provider within gatekeeper
-  timeout:
-    # timeout values must match gatekeeper webhook timeouts
-    validationTimeoutSeconds: 5
-    mutationTimeoutSeconds: 2
-  cache:
-    enabled: true # enable ratify wide cache
-    type: ristretto # cache type, currently only ristretto(default) and redis are supported
-    cacheSizeMb: 256 # max size of the cache in MB
-    ttl: 10s # cache ttl duration
-    name: "" # state-store name for dapr cache, defaults to redis
-  enableMutation: true # enableMutation allows ratify to mutate image tag to image digest. It is highly recommended to enable mutation since the verified digest may be different from the one run.
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
 
 podAnnotations: {}
 podLabels: {}
-enableRuntimeDefaultSeccompProfile: true
-healthPort: 9099
 
-rbac:
-  create: true
+podSecurityContext: {}
+  # fsGroup: 2000
 
-upgradeCRDs:
-  enabled: true
-  extraRules: []
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
 
-crds:
-  affinity: {}
-  tolerations: []
-  nodeSelector: { kubernetes.io/os: linux }
-  resources: {}
-  securityContext:
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop:
-        - ALL
-    readOnlyRootFilesystem: true
-    runAsGroup: 65532
-    runAsNonRoot: true
-    runAsUser: 65532
+service:
+  type: ClusterIP
+  port: 80
 
-policy:
-  useRego: false # Set to true if Rego Policy would be used for evaluation.
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
 
-logger:
-  formatter: "text" # Formatter can be set to `text`, `json` or `logstash`. Default to `text` if not specified.
-  level: "info" # Default to `info` if not specified.
-  requestHeaders:
-    traceIDHeaderName: # List of headers that include the trace ID in the external data requests to Ratify. The same headers will be passed to upstream services like remote registries.
-      - "" # e.g. Set it to `x-ms-correlation-request-id` to trace across Azure.
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
 
-crl:
-  cache:
-    enabled: true # Enable CRL cache
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
 
-# See https://ratify.dev/docs/reference/usage#feature-flags for a list of available feature flags
-featureFlags:
-  # RATIFY_FEATURE_NAME: true
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
 
-  # RATIFY_CERT_ROTATION enables rotation for TLS certificates.
-  RATIFY_CERT_ROTATION: false
-  # RATIFY_EXPERIMENTAL_HIGH_AVAILABILITY enables high availability mode including distributed caching.
-  RATIFY_EXPERIMENTAL_HIGH_AVAILABILITY: false
+# Additional volumes on the output Deployment definition.
+volumes: []
+# - name: foo
+#   secret:
+#     secretName: mysecret
+#     optional: false
 
-notationCert: "" # DEPRECATED: Use notationCerts instead
-akvCertConfig: # DEPRECATED: Use azurekeyvault instead
-  enabled: false # DEPRECATED: Use azurekeyvault.enabled instead
-  vaultURI: # DEPRECATED: Use azurekeyvault.vaultURI instead
-  cert1Name: # DEPRECATED: Use azurekeyvault.certificates instead
-  cert1Version: # DEPRECATED: Use azurekeyvault.certificates instead
-  cert2Name: # DEPRECATED: Use azurekeyvault.certificates instead
-  cert2Version: # DEPRECATED: Use azurekeyvault.certificates instead
-  certificates: # DEPRECATED: Use azurekeyvault.certificates instead
-  tenantId: # DEPRECATED: Use azurekeyvault.tenantId instead
+# Additional volumeMounts on the output Deployment definition.
+volumeMounts: []
+# - name: foo
+#   mountPath: "/etc/foo"
+#   readOnly: true
 
-# env: environment variables for ratify container
-env: []
-#  - name: https_proxy
-#    value: http://proxy-server:80
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

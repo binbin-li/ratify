@@ -1,23 +1,68 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "ratify.fullname" . }}-configuration
+  name: ratify-configmap
 data:
   config.json: |
     {
-      "logger": {
-        "formatter": {{ .Values.logger.formatter | quote }},
-        "requestHeaders": {
-          "traceIDHeaderName": {{ .Values.logger.requestHeaders.traceIDHeaderName | quote }}
-        }
+      "verifiers": [
+          {
+              "name": "notation-1",
+              "type": "notation",
+              "parameters": {
+                  "trustPolicyDocument": {
+                      "Version": "1.0",
+                      "trustPolicies": [
+                          {
+                              "name": "default",
+                              "registryScopes": [
+                                  "*"
+                              ],
+                              "signatureVerification": {
+                                  "level": "strict"
+                              },
+                              "trustStores": [
+                                  "ca:ratify4"
+                              ],
+                              "trustedIdentities": [
+                                  "*"
+                              ]
+                          }
+                      ]
+                  },
+                  "trustStorePath": "/usr/local/.config/notation"
+              }
+          }
+      ],
+      "stores": {
+          "libinbinacr.azurecr.io": {
+              "type": "registry-store",
+              "parameters": {
+                  "credential": {
+                      "username": "",
+                      "password": ""
+                  }
+              }
+          }
       },
-      "executor": {
-        "verificationRequestTimeout": {{ .Values.provider.timeout.validationTimeoutSeconds | int | mul 1000 | add -100 }},
-        "mutationRequestTimeout": {{ .Values.provider.timeout.mutationTimeoutSeconds | int | mul 1000 | add -50 }}
-      },
-      "crl": {
-        "cache":{
-          "enabled": {{ .Values.crl.cache.enabled }}
-        }
+      "policyEnforcer": {
+          "type": "threshold-policy",
+          "parameters": {
+              "policy": {
+                  "rules": [
+                      {
+                          "verifierName": "notation-1"
+                      }
+                  ]
+              }
+          }
       }
     }
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: notation-configmap
+data:
+  trustpolicy.json: |
+{{ .Values.notation.trustpolicy | indent 4 }}
