@@ -1,34 +1,11 @@
 {
-    "executor": {
-    },
-    "store": {
-        "version": "1.0.0",
-        "plugins": [
-            {
-                "name": "oras"
-            }
-        ]
-    },
-    "policy": {
-        "version": "1.0.0",
-        "plugin": {
-            "name": "configPolicy",
-            "artifactVerificationPolicies": {
-                "application/vnd.cncf.notary.signature": "any"
-            }
-        }
-    },
-    "verifier": {
-        "version": "1.0.0",
-        "plugins": [
-            {
-                "name": "notation",
-                "artifactTypes": "application/vnd.cncf.notary.signature",
-                "verificationCerts": [
-                    "/usr/local/ratify-certs/notation/truststore"
-                ],
-                "trustPolicyDoc": {
-                    "version": "1.0",
+    "verifiers": [
+        {
+            "name": "notation-1",
+            "type": "notation",
+            "parameters": {
+                "trustPolicyDocument": {
+                    "Version": "1.0",
                     "trustPolicies": [
                         {
                             "name": "default",
@@ -39,34 +16,39 @@
                                 "level": "strict"
                             },
                             "trustStores": [
-                                "ca:certs"
+                                "ca:ratify4"
                             ],
                             "trustedIdentities": [
                                 "*"
                             ]
                         }
                     ]
-                }
-            },
-            {
-                "name": "sbom",
-                "artifactTypes": "application/spdx+json",
-                "nestedReferences": "application/vnd.cncf.notary.signature"
-            },
-            {
-                "name": "licensechecker",
-                "artifactTypes": "application/vnd.ratify.spdx.v0",
-                "allowedLicenses": [
-                    "MIT"
-                ]
-            },
-            {
-                "name": "vulnerabilityreport",
-                "artifactTypes": "application/sarif+json",
-                "maximumAge": "24h",
-                "disallowedSeverities": ["high", "critical"],
-                "denylistCVEs": ["CVE-2021-44228"]
+                },
+                "trustStorePath": "/app/notation"
             }
-        ]
+        }
+    ],
+    "stores": {
+        "libinbinacr.azurecr.io": {
+            "type": "registry-store",
+            "parameters": {
+                "credential": {
+                    "username": "",
+                    "password": ""
+                }
+            }
+        }
+    },
+    "policyEnforcer": {
+        "type": "threshold-policy",
+        "parameters": {
+            "policy": {
+                "rules": [
+                    {
+                        "verifierName": "notation-1"
+                    }
+                ]
+            }
+        }
     }
 }

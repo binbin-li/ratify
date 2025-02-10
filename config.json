@@ -1,0 +1,42 @@
+{
+    "verifiers": [
+        {
+            "name": "notation-1",
+            "type": "notation",
+            "parameters": {
+                "trustPolicyDocument": {
+                    "Version": "1.0",
+                    "trustPolicies": [
+                        {
+                            "name": "default",
+                            "registryScopes": [
+                                "*"
+                            ],
+                            "signatureVerification": {
+                                "level": "strict"
+                            },
+                            "trustStores": [
+                                "ca:wabbit-networks.io"
+                            ],
+                            "trustedIdentities": [
+                                "*"
+                            ]
+                        }
+                    ]
+                },
+                "trustStorePath": "/home/libinbin/.config/notation/truststore"
+            }
+        }
+    ],
+    "stores": {
+        "libinbinacr.azurecr.io": {
+            "type": "registry-store",
+            "parameters": {
+                "credential": {
+                    "username": "00000000-0000-0000-0000-000000000000",
+                    "password": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkVZSlg6Wkw3TjpRTEg3OkxMVkg6RFZZRTpFNlpPOlI0Sjc6N1Y2NDpYQUJEOlZWUkg6SVo1TjpZUlA0In0.eyJqdGkiOiJiODFiM2ExZi00ODM0LTQwNDAtODFhMi00MTZjMjA5MmEyOTYiLCJzdWIiOiJsaWJpbmJpbkBtaWNyb3NvZnQuY29tIiwibmJmIjoxNzQzNjA3NzczLCJleHAiOjE3NDM2MTk0NzMsImlhdCI6MTc0MzYwNzc3MywiaXNzIjoiQXp1cmUgQ29udGFpbmVyIFJlZ2lzdHJ5IiwiYXVkIjoibGliaW5iaW5hY3IuYXp1cmVjci5pbyIsInZlcnNpb24iOiIxLjAiLCJyaWQiOiJlNmVhMzQ0ZWY1ZTU0ZGUzOTg1NzY1MjUzYjc1MTRkZCIsImdyYW50X3R5cGUiOiJyZWZyZXNoX3Rva2VuIiwiYXBwaWQiOiIwNGIwNzc5NS04ZGRiLTQ2MWEtYmJlZS0wMmY5ZTFiZjdiNDYiLCJ0ZW5hbnQiOiI3MmY5ODhiZi04NmYxLTQxYWYtOTFhYi0yZDdjZDAxMWRiNDciLCJwZXJtaXNzaW9ucyI6eyJhY3Rpb25zIjpbInJlYWQiLCJ3cml0ZSIsImRlbGV0ZSIsIm1ldGFkYXRhL3JlYWQiLCJtZXRhZGF0YS93cml0ZSIsImRlbGV0ZWQvcmVhZCIsImRlbGV0ZWQvcmVzdG9yZS9hY3Rpb24iXX0sInJvbGVzIjpbXX0.Jl0O-0dBZxrR50O-cr0KZg58p1HDvF-Peqw5Quu6nWFm0ZZdpl0oqU_UtcRARnybHzC39XVgaOmbbk52t-zeG9lb7na1o258axM_dk8hQpDupJb1ERA1JR_uCqPV-SfS6XJaKSr-i1V5T9bpI-2M-MEslVBjMAdLmOa_t_mH3QM1npWwPaaFc523pAAGhPkxg1v2ZmXPF6ha7az8LUKdbhcwfw72vdio8-j8OCCTJLk0-6M7OgwLQCh4vJ0YdDTBJHtYSv0nfdyK6CwnGc8uMKxs2clIwzSW1LeOXRME4KyN1ZWrVj5mJyDo3K8XAXAAOXeKUBgXwGqWESrA3AK5xg"
+                }
+            }
+        }
+    }
+}
