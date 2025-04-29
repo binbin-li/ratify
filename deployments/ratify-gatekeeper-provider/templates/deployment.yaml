@@ -47,6 +47,11 @@ spec:
             - mountPath: "/usr/local/notation/certs"
               name: notation-certs
               readOnly: true
+            {{- if (lookup "v1" "Secret" .Release.Namespace "gatekeeper-webhook-server-cert") }}
+            - mountPath: /usr/local/tls/client-ca
+              name: client-ca-cert
+              readOnly: true
+            {{- end }}
       volumes:
         - name: ratify-config
           configMap:
@@ -57,3 +62,11 @@ spec:
         - name: notation-trust-policy
           configMap:
             name: notation-configmap
+        {{- if (lookup "v1" "Secret" .Release.Namespace "gatekeeper-webhook-server-cert") }}
+        - name: client-ca-cert
+          secret:
+            secretName: gatekeeper-webhook-server-cert
+            items:
+              - key: ca.crt
+                path: ca.crt
+        {{- end }}
