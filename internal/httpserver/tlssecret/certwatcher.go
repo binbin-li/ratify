@@ -26,7 +26,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-type TLSSecretWatcher struct {
+type Watcher struct {
 	sync.RWMutex
 	watcher             *fsnotify.Watcher
 	ratifyServerTLSCert *tls.Certificate
@@ -37,7 +37,7 @@ type TLSSecretWatcher struct {
 	ratifyServerTLSKeyPath  string
 }
 
-func NewTLSSecretWatcher(gatekeeperCACertPath, ratifyServerTLSCertPath, ratifyServerTLSKeyPath string) (*TLSSecretWatcher, error) {
+func NewTLSSecretWatcher(gatekeeperCACertPath, ratifyServerTLSCertPath, ratifyServerTLSKeyPath string) (*Watcher, error) {
 	if ratifyServerTLSCertPath == "" || ratifyServerTLSKeyPath == "" {
 		return nil, fmt.Errorf("ratify server TLS cert and key paths must be set")
 	}
@@ -46,8 +46,8 @@ func NewTLSSecretWatcher(gatekeeperCACertPath, ratifyServerTLSCertPath, ratifySe
 	if err != nil {
 		return nil, fmt.Errorf("failed to create file watcher: %w", err)
 	}
-	
-	tlsWatcher := &TLSSecretWatcher{
+
+	tlsWatcher := &Watcher{
 		watcher:                 watcher,
 		gatekeeperCACertPath:    gatekeeperCACertPath,
 		ratifyServerTLSCertPath: ratifyServerTLSCertPath,
@@ -61,7 +61,7 @@ func NewTLSSecretWatcher(gatekeeperCACertPath, ratifyServerTLSCertPath, ratifySe
 	return tlsWatcher, nil
 }
 
-func (w *TLSSecretWatcher) Start() error {
+func (w *Watcher) Start() error {
 	files := []string{w.ratifyServerTLSCertPath, w.ratifyServerTLSKeyPath}
 	if w.gatekeeperCACertPath != "" {
 		files = append(files, w.gatekeeperCACertPath)
@@ -76,7 +76,7 @@ func (w *TLSSecretWatcher) Start() error {
 	return nil
 }
 
-func (w *TLSSecretWatcher) loadCerts() error {
+func (w *Watcher) loadCerts() error {
 	if w.gatekeeperCACertPath != "" {
 		caCert, err := os.ReadFile(w.gatekeeperCACertPath)
 		if err != nil {
@@ -101,7 +101,7 @@ func (w *TLSSecretWatcher) loadCerts() error {
 }
 
 // watcher monitors the CA cert file and reloads it on change
-func (w *TLSSecretWatcher) watch() {
+func (w *Watcher) watch() {
 	for {
 		select {
 		case event, ok := <-w.watcher.Events:
@@ -129,13 +129,13 @@ func (w *TLSSecretWatcher) watch() {
 	}
 }
 
-func (w *TLSSecretWatcher) Stop() {
+func (w *Watcher) Stop() {
 	if err := w.watcher.Close(); err != nil {
 		logrus.Errorf("error closing watcher: %v", err)
 	}
 }
 
-func (w *TLSSecretWatcher) GetConfigForClient(*tls.ClientHelloInfo) (*tls.Config, error) {
+func (w *Watcher) GetConfigForClient(*tls.ClientHelloInfo) (*tls.Config, error) {
 	w.RLock()
 	defer w.RUnlock()
 
