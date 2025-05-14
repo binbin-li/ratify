@@ -3,13 +3,13 @@ module github.com/ratify-project/ratify/v2
 go 1.23.8
 
 require (
-	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.17.1
+	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.18.0
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.8.2
-	github.com/Azure/azure-sdk-for-go/sdk/containers/azcontainerregistry v0.2.2
+	github.com/Azure/azure-sdk-for-go/sdk/containers/azcontainerregistry v0.2.3
 	github.com/Azure/azure-sdk-for-go/sdk/keyvault/azcertificates v0.9.0
 	github.com/Azure/azure-sdk-for-go/sdk/keyvault/azkeys v0.10.0
 	github.com/Azure/azure-sdk-for-go/sdk/keyvault/azsecrets v0.12.0
-	github.com/AzureAD/microsoft-authentication-library-for-go v1.3.3
+	github.com/AzureAD/microsoft-authentication-library-for-go v1.4.2
 	github.com/alibabacloud-go/cr-20181201/v2 v2.5.0
 	github.com/alibabacloud-go/darabonba-openapi/v2 v2.0.11
 	github.com/alibabacloud-go/tea v1.2.2
@@ -31,7 +31,6 @@ require (
 	github.com/gorilla/mux v1.8.1
 	github.com/notaryproject/notation-core-go v1.3.0
 	github.com/notaryproject/notation-go v1.3.2
-	github.com/notaryproject/notation-plugin-framework-go v1.0.0
 	github.com/open-policy-agent/cert-controller v0.8.0
 	github.com/open-policy-agent/frameworks/constraint v0.0.0-20230411224310-3f237e2710fa
 	github.com/open-policy-agent/opa v1.4.2
@@ -51,7 +50,6 @@ require (
 	go.opentelemetry.io/otel/exporters/prometheus v0.49.0
 	go.opentelemetry.io/otel/metric v1.35.0
 	go.opentelemetry.io/otel/sdk/metric v1.35.0
-	golang.org/x/sync v0.14.0
 	k8s.io/api v0.28.15
 	k8s.io/apimachinery v0.28.15
 	k8s.io/client-go v0.28.15
@@ -110,6 +108,7 @@ require (
 	github.com/hashicorp/go-retryablehttp v0.7.7 // indirect
 	github.com/miekg/pkcs11 v1.1.1 // indirect
 	github.com/mozillazg/docker-credential-acr-helper v0.3.0 // indirect
+	github.com/notaryproject/notation-plugin-framework-go v1.0.0 // indirect
 	github.com/notaryproject/tspclient-go v1.0.0 // indirect
 	github.com/nozzle/throttler v0.0.0-20180817012639-2ea982251481 // indirect
 	github.com/sagikazarmark/locafero v0.7.0 // indirect
@@ -127,6 +126,7 @@ require (
 	github.com/yashtewari/glob-intersection v0.2.0 // indirect
 	go.opentelemetry.io/auto/sdk v1.1.0 // indirect
 	go.step.sm/crypto v0.60.0 // indirect
+	golang.org/x/sync v0.14.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20250303144028-a0af3efb3deb // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250313205543-e70fdf4c4cb4 // indirect
 	google.golang.org/grpc v1.71.1 // indirect
@@ -135,7 +135,7 @@ require (
 )
 
 require (
-	github.com/Azure/azure-sdk-for-go/sdk/internal v1.10.0 // indirect
+	github.com/Azure/azure-sdk-for-go/sdk/internal v1.11.1 // indirect
 	github.com/Azure/go-autorest v14.2.0+incompatible // indirect
 	github.com/Azure/go-autorest/autorest v0.11.29 // indirect
 	github.com/Azure/go-autorest/autorest/adal v0.9.24 // indirect
