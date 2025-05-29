@@ -155,12 +155,12 @@ entries:
   ratify-gatekeeper-provider:
   - apiVersion: v2
     appVersion: 2.0.0-alpha.1
-    created: "2025-05-29T07:31:38.284542138Z"
+    created: "2025-05-29T07:57:24.105176366Z"
     description: A Helm chart for Ratify
-    digest: 251055b9084e9256ea8bc2dda650e16660311502dc6171d6bb1ce308e6119dd7
+    digest: 9d96c1e4865871b1dd232947140cffadfa8fefd1085af6b483025e625196af88
     name: ratify-gatekeeper-provider
     type: application
     urls:
     - https://binbin-li.github.io/ratify/ratify-gatekeeper-provider-2.0.0-alpha.1.tgz
     version: 2.0.0-alpha.1
-generated: "2025-05-29T07:31:38.283864343Z"
+generated: "2025-05-29T07:57:24.104640346Z"
