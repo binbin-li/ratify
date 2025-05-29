@@ -152,4 +152,15 @@ entries:
     urls:
     - https://deislabs.github.io/ratify/ratify-0.1.0.tgz
     version: 0.1.0
-generated: "2024-10-22T11:49:43.989732456Z"
+  ratify-gatekeeper-provider:
+  - apiVersion: v2
+    appVersion: 2.0.0-alpha.1
+    created: "2025-05-29T07:31:38.284542138Z"
+    description: A Helm chart for Ratify
+    digest: 251055b9084e9256ea8bc2dda650e16660311502dc6171d6bb1ce308e6119dd7
+    name: ratify-gatekeeper-provider
+    type: application
+    urls:
+    - https://binbin-li.github.io/ratify/ratify-gatekeeper-provider-2.0.0-alpha.1.tgz
+    version: 2.0.0-alpha.1
+generated: "2025-05-29T07:31:38.283864343Z"
