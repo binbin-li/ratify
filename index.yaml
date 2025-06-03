@@ -290,8 +290,6 @@ entries:
     created: "2025-06-03T03:32:51.497864132Z"
     description: A Helm chart for Ratify Gatekeeper Provider
     digest: 1467ed1029aaccee4f609dac2baf7c6f6d88f4ebd309adce41b5110f77ad1cd0
-    home: https://github.com/notaryproject/ratify
-    icon: https://raw.githubusercontent.com/notaryproject/ratify/main/assets/logo.svg
     name: ratify-gatekeeper-provider
     type: application
     urls:
