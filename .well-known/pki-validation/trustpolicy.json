@@ -4,7 +4,7 @@
         {
             "name": "ratify-images",
             "registryScopes": [
-                "ghcr.io/notaryproject/ratify-gatekeeper-provider"
+                "ghcr.io/binbin-li/ratify-gatekeeper-provider"
             ],
             "signatureVerification": {
                 "level" : "strict" 
