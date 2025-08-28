@@ -50,6 +50,9 @@ func (h *CRLHandler) NewFetcher() (corecrl.Fetcher, error) {
 	var err error
 	fetcherOnce.Do(func() {
 		globalFetcher, err = CreateCRLFetcher(h.httpClient, dir.PathCRLCache)
+		if err != nil {
+			fmt.Printf("failed to create crl fetcher: %w", err)
+		}
 	})
 	if err != nil {
 		return nil, err
