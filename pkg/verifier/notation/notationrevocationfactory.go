@@ -16,6 +16,7 @@ package notation
 import (
 	"net/http"
 	"sync"
+	"fmt"
 
 	"github.com/notaryproject/notation-core-go/revocation"
 	corecrl "github.com/notaryproject/notation-core-go/revocation/crl"
